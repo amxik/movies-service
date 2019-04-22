@@ -3,7 +3,9 @@ package me.max.moviesservice.movie;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import me.max.moviesservice.data.BaseEntity;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 
@@ -15,11 +17,18 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "movies")
-public class MovieEntity extends BaseEntity {
+@EntityListeners(AuditingEntityListener.class)
+public class MovieEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
+    @CreatedDate
+    private Long createdAt;
+
+    @LastModifiedDate
+    private Long lastModified;
 
     private String title;
 
