@@ -8,6 +8,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.util.Date;
 
 /**
  * Created by amxik on 22.04.2019.
@@ -32,13 +33,21 @@ public class MovieEntity {
 
     private String title;
 
+    private String genre;
+
     private String description;
 
     private Integer duration;
 
-    public MovieEntity(String title, String description, Integer duration) {
+    @Temporal ( TemporalType.DATE )
+    private Date reliaseDate;
+
+
+    public MovieEntity(String title, String genre, String description, Integer duration, Date reliaseDate) {
         this.title = title;
+        this.genre = genre;
         this.description = description;
         this.duration = duration;
+        this.reliaseDate = reliaseDate;
     }
 }
