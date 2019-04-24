@@ -3,10 +3,11 @@ package me.max.moviesservice.service;
 import me.max.moviesservice.movie.MovieEntity;
 import me.max.moviesservice.repositories.MovieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -33,13 +34,14 @@ public class MovieEntityService {
     }
 
     public void deleteMovie(long id){
+
         movieRepository.deleteById(id);
     }
 
-    public List<MovieEntity> getAll(){
+    public List<MovieEntity> getAllMovies(int offset, int limit){
 
         List<MovieEntity> list = new ArrayList<>();
-        movieRepository.findAll().forEach(list::add);
+        movieRepository.findAll(new PageRequest(offset, limit)).forEach(list::add);
         return list;
 
     }
@@ -48,12 +50,12 @@ public class MovieEntityService {
         return movieRepository.findById(id).get();
     }
 
-    public MovieEntity getMovieByTitle(String title){
-        return movieRepository.findByTitle(title);
+    public List<MovieEntity> getMovieByTitle(String title,  int offset, int limit){
+        return movieRepository.findByTitleContaining(title, new PageRequest(offset, limit));
     }
 
-    public List<MovieEntity> getMoviesByReleaseDate(Date releaseDate){
-        return movieRepository.findAllByReliaseDate(releaseDate);
+    public List<MovieEntity> getMoviesByReleaseDate(Date releaseDate, int offset, int limit){
+        return movieRepository.findAllByReleaseDate(releaseDate, new PageRequest(offset,limit));
     }
 
 

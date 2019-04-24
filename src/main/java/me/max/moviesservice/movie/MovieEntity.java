@@ -40,14 +40,14 @@ public class MovieEntity {
     private Integer duration;
 
     @Temporal ( TemporalType.DATE )
-    private Date reliaseDate;
+    private Date releaseDate;
 
 
-    public MovieEntity(String title, String genre, String description, Integer duration, Date reliaseDate) {
+    public MovieEntity(String title, String genre, String description, Integer duration, Date releaseDate) {
         this.title = title;
         this.genre = genre;
         this.description = description;
         this.duration = duration;
-        this.reliaseDate = reliaseDate;
+        this.releaseDate = releaseDate;
     }
 }

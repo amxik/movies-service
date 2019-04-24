@@ -1,6 +1,7 @@
 package me.max.moviesservice.repositories;
 
 import me.max.moviesservice.movie.MovieEntity;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
@@ -13,8 +14,8 @@ import java.util.List;
 @Repository
 public interface MovieRepository extends PagingAndSortingRepository<MovieEntity,Long> {
 
-     MovieEntity findByTitle(String title);
+    List<MovieEntity> findByTitleContaining(String title, Pageable pageable);
 
-     List<MovieEntity> findAllByReliaseDate(Date releaseDate);
+     List<MovieEntity> findAllByReleaseDate(Date releaseDate, Pageable pageable);
 
 }
