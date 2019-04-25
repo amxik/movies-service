@@ -43,6 +43,7 @@ public class MovieEntityController {
 
     @RequestMapping(method = RequestMethod.PUT, path = "movies/{id}",
                     produces = {"application/json","application/xml"})
+    @ResponseStatus(code = HttpStatus.CREATED)
     public @ResponseBody
     MovieEntity replaceMovie(@PathVariable("id") long movieId,
                              @RequestBody MovieEntity newMovie){
@@ -57,8 +58,61 @@ public class MovieEntityController {
      return movieEntityService.updateMovie(movieEntity);
  }
 
+    @RequestMapping(method = RequestMethod.PATCH, path = "movies/{id}",
+            produces = {"application/json","application/xml"})
+    @ResponseStatus(code = HttpStatus.CREATED)
+    public @ResponseBody
+    MovieEntity updateMovie(@PathVariable("id") long movieId, @RequestBody
+                            MovieEntity newMovie){
+        MovieEntity movieFromStorage = movieEntityService.getMovieById(movieId);
 
- 
+
+        MovieEntity movieEntity = new MovieEntity();
+
+
+        movieEntity.setId(movieId);
+        if(newMovie.getTitle() != null){
+        movieEntity.setTitle(newMovie.getTitle());
+        } else {
+            movieEntity.setTitle(movieFromStorage.getTitle());
+        }
+        if(newMovie.getGenre() != null) {
+            movieEntity.setGenre(newMovie.getGenre());
+        } else {
+            movieEntity.setGenre(movieFromStorage.getGenre());
+        }
+        if(newMovie.getDescription() != null) {
+            movieEntity.setDescription(newMovie.getDescription());
+        } else {
+            movieEntity.setDescription(movieFromStorage.getDescription());
+        }
+        if(newMovie.getDuration() != null) {
+            movieEntity.setDuration(newMovie.getDuration());
+        } else {
+            movieEntity.setDuration(movieFromStorage.getDuration());
+        }
+        if(newMovie.getReleaseDate() != null) {
+            movieEntity.setReleaseDate(newMovie.getReleaseDate());
+        } else {
+            movieEntity.setReleaseDate(movieFromStorage.getReleaseDate());
+        }
+
+        return movieEntityService.updateMovie(movieEntity);
+
+    }
+
+
+    @RequestMapping(method = RequestMethod.DELETE, path = "movies/{id}",
+                    produces = {"application/json", "application/xml"})
+
+    public void deleteMovie(@PathVariable("id") long movieId){
+      movieEntityService.deleteMovie(movieId);
+    }
+
+
+    
+
+
 
 
 
