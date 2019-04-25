@@ -4,9 +4,11 @@ package me.max.moviesservice.controllers;
 import me.max.moviesservice.movie.MovieEntity;
 import me.max.moviesservice.service.MovieEntityService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -110,11 +112,22 @@ public class MovieEntityController {
     }
 
 
-    
+    @RequestMapping(method = RequestMethod.GET, path = "movies/search/{title}",
+            produces = {"application/json", "application/xml"})
+    public @ResponseBody List<MovieEntity> searchMoviesByTitle(@PathVariable("title") String title,
+                                                            @RequestParam(value = "offset",required = false,defaultValue = "0") int offset,
+                                                            @RequestParam(value = "limit",required = false,defaultValue = "20") int limit){
 
+     return movieEntityService.getMovieByTitle(title,offset,limit);
+    }
 
+    @RequestMapping(method = RequestMethod.GET, path = "movies/search/{releaseDate}",
+                        produces = {"application/json","application/xml"})
+    public @ResponseBody List<MovieEntity> searchMoviesByReleaseDate(@PathVariable("releaseDate") @DateTimeFormat(pattern="yyyy-MM-dd") Date releaseDate,
+                                                                     @RequestParam(value = "offset",required = false,defaultValue = "0") int offset,
+                                                                     @RequestParam(value = "limit",required = false,defaultValue = "20") int limit){
 
-
-
+     return movieEntityService.getMoviesByReleaseDate(releaseDate,offset,limit);
+    }
 
 }
