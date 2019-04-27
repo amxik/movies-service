@@ -26,7 +26,7 @@ public class MovieDTO {
     @Size (min = 2, max = 3)
     private Integer duration;
 
-
+    @Size(min = 8)
     private Date releaseDate;
 
     public long getId() {

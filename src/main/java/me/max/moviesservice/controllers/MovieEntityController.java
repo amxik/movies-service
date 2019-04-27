@@ -8,6 +8,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import java.util.Date;
 import java.util.List;
 
@@ -35,14 +37,14 @@ public class MovieEntityController {
                 produces = {"application/json","application/xml"})
     @ResponseStatus(code = HttpStatus.CREATED)
  public @ResponseBody
-MovieDTO createMovie(@RequestBody MovieDTO movieToCreate){
+MovieDTO createMovie(@Valid @RequestBody MovieDTO movieToCreate){
      return movieEntityService.createMovie(movieToCreate);
  }
 
     @RequestMapping(method = RequestMethod.GET, value = "/{id}",
             produces = {"application/json", "application/xml"})
     public @ResponseBody
-    MovieDTO getMovie(@PathVariable("id") long movieId) {
+    MovieDTO getMovie(@Valid @Min(0) @PathVariable("id") long movieId) {
         return movieEntityService.getMovieById(movieId);
     }
 
@@ -50,8 +52,8 @@ MovieDTO createMovie(@RequestBody MovieDTO movieToCreate){
                     produces = {"application/json","application/xml"})
     @ResponseStatus(code = HttpStatus.CREATED)
     public @ResponseBody
-    MovieDTO replaceMovie(@PathVariable("id") long movieId,
-                             @RequestBody MovieDTO newMovie){
+    MovieDTO replaceMovie(@Valid @Min(0) @PathVariable("id") long movieId,
+                             @Valid @RequestBody MovieDTO newMovie){
      MovieDTO movieDTO = new MovieDTO();
      movieDTO.setId(movieId);
      movieDTO.setTitle(newMovie.getTitle());
@@ -66,7 +68,7 @@ MovieDTO createMovie(@RequestBody MovieDTO movieToCreate){
             produces = {"application/json","application/xml"})
     @ResponseStatus(code = HttpStatus.CREATED)
     public @ResponseBody
-    MovieDTO updateMovie(@PathVariable("id") long movieId, @RequestBody
+    MovieDTO updateMovie(@Valid @Min(0) @PathVariable("id") long movieId,@Valid @RequestBody
             MovieDTO newMovie){
         MovieDTO movieFromStorage = movieEntityService.getMovieById(movieId);
 
@@ -110,14 +112,14 @@ MovieDTO createMovie(@RequestBody MovieDTO movieToCreate){
     @RequestMapping(method = RequestMethod.DELETE, value = "/{id}",
                     produces = {"application/json", "application/xml"})
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
-    public void deleteMovie(@PathVariable("id") long movieId){
+    public void deleteMovie(@Valid @Min(0) @PathVariable("id") long movieId){
      movieEntityService.deleteMovie(movieId);
     }
 
 
     @RequestMapping(method = RequestMethod.GET, value = "/searchbytitle/{title}",
             produces = {"application/json", "application/xml"})
-    public @ResponseBody List<MovieDTO> searchMoviesByTitle(@PathVariable("title") String title,
+    public @ResponseBody List<MovieDTO> searchMoviesByTitle(@Valid @PathVariable("title") String title,
                                                                @RequestParam(value = "offset",required = false,defaultValue = "0") int offset,
                                                                @RequestParam(value = "limit",required = false,defaultValue = "20") int limit){
 
@@ -126,7 +128,7 @@ MovieDTO createMovie(@RequestBody MovieDTO movieToCreate){
 
     @RequestMapping(method = RequestMethod.GET, value = "/searchbydate/{releaseDate}",
                         produces = {"application/json","application/xml"})
-    public @ResponseBody List<MovieDTO> searchMoviesByReleaseDate(@PathVariable("releaseDate") @DateTimeFormat(pattern="yyyy-MM-dd") Date releaseDate,
+    public @ResponseBody List<MovieDTO> searchMoviesByReleaseDate(@Valid @PathVariable("releaseDate") @DateTimeFormat(pattern="yyyy-MM-dd") Date releaseDate,
                                                                      @RequestParam(value = "offset",required = false,defaultValue = "0") int offset,
                                                                      @RequestParam(value = "limit",required = false,defaultValue = "20") int limit){
 
