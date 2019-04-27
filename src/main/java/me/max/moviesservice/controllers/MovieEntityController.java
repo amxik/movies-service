@@ -16,6 +16,7 @@ import java.util.List;
  */
 
 @RestController
+@RequestMapping("/movies")
 public class MovieEntityController {
 
     @Autowired
@@ -23,14 +24,14 @@ public class MovieEntityController {
 
 
  @RequestMapping(method = RequestMethod.GET,
- path = "movies", produces = {"application/json","application/xml"})
+         produces = {"application/json","application/xml"})
     public @ResponseBody List<me.max.moviesservice.dto.MovieDTO> getMovies(@RequestParam(value = "offset",required = false,defaultValue = "0") int offset,
                                                                            @RequestParam(value = "limit",required = false,defaultValue = "20") int limit){
        return movieEntityService.getAllMovies(offset,limit);
  }
 
 
-@RequestMapping(method = RequestMethod.POST,path = "movies",
+@RequestMapping(method = RequestMethod.POST,
                 produces = {"application/json","application/xml"})
     @ResponseStatus(code = HttpStatus.CREATED)
  public @ResponseBody
@@ -38,14 +39,14 @@ MovieDTO createMovie(@RequestBody MovieDTO movieToCreate){
      return movieEntityService.createMovie(movieToCreate);
  }
 
-    @RequestMapping(method = RequestMethod.GET, path = "movies/{id}",
+    @RequestMapping(method = RequestMethod.GET, value = "/{id}",
             produces = {"application/json", "application/xml"})
     public @ResponseBody
     MovieDTO getMovie(@PathVariable("id") long movieId) {
         return movieEntityService.getMovieById(movieId);
     }
 
-    @RequestMapping(method = RequestMethod.PUT, path = "movies/{id}",
+    @RequestMapping(method = RequestMethod.PUT, value = "/{id}",
                     produces = {"application/json","application/xml"})
     @ResponseStatus(code = HttpStatus.CREATED)
     public @ResponseBody
@@ -61,7 +62,7 @@ MovieDTO createMovie(@RequestBody MovieDTO movieToCreate){
      return movieEntityService.updateMovie(movieDTO);
  }
 
-    @RequestMapping(method = RequestMethod.PATCH, path = "movies/{id}",
+    @RequestMapping(method = RequestMethod.PATCH, value = "/{id}",
             produces = {"application/json","application/xml"})
     @ResponseStatus(code = HttpStatus.CREATED)
     public @ResponseBody
@@ -106,7 +107,7 @@ MovieDTO createMovie(@RequestBody MovieDTO movieToCreate){
     }
 
 
-    @RequestMapping(method = RequestMethod.DELETE, path = "movies/{id}",
+    @RequestMapping(method = RequestMethod.DELETE, value = "/{id}",
                     produces = {"application/json", "application/xml"})
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
     public void deleteMovie(@PathVariable("id") long movieId){
@@ -114,7 +115,7 @@ MovieDTO createMovie(@RequestBody MovieDTO movieToCreate){
     }
 
 
-    @RequestMapping(method = RequestMethod.GET, path = "movies/search/{title}",
+    @RequestMapping(method = RequestMethod.GET, value = "/searchbytitle/{title}",
             produces = {"application/json", "application/xml"})
     public @ResponseBody List<MovieDTO> searchMoviesByTitle(@PathVariable("title") String title,
                                                                @RequestParam(value = "offset",required = false,defaultValue = "0") int offset,
@@ -123,7 +124,7 @@ MovieDTO createMovie(@RequestBody MovieDTO movieToCreate){
      return movieEntityService.getMovieByTitle(title,offset,limit);
     }
 
-    @RequestMapping(method = RequestMethod.GET, path = "movies/search/{releaseDate}",
+    @RequestMapping(method = RequestMethod.GET, value = "/searchbydate/{releaseDate}",
                         produces = {"application/json","application/xml"})
     public @ResponseBody List<MovieDTO> searchMoviesByReleaseDate(@PathVariable("releaseDate") @DateTimeFormat(pattern="yyyy-MM-dd") Date releaseDate,
                                                                      @RequestParam(value = "offset",required = false,defaultValue = "0") int offset,
