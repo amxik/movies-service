@@ -2,6 +2,8 @@ package me.max.moviesservice.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Date;
@@ -30,11 +32,11 @@ public class MovieDTO {
     private String description;
 
     @JsonProperty("duration")
-    @Size(min = 2, max = 3)
+    @Min(1)
     private Integer duration;
 
     @JsonProperty("releaseDate")
-    @Size(min = 8)
+    @NotNull
     private Date releaseDate;
 
     public long getId() {
