@@ -6,6 +6,7 @@ import me.max.moviesservice.repositories.MovieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -23,44 +24,57 @@ public class MovieEntityService {
     private MovieRepository movieRepository;
 
 
-    public MovieDTO createMovie(MovieDTO movieDTO){
+    public MovieDTO createMovie(MovieDTO movieDTO) {
         MovieEntity movieEntity = toEntity(movieDTO);
         MovieEntity movie = movieRepository.save(movieEntity);
         return toDto(movie);
     }
 
-    public MovieDTO updateMovie(MovieDTO movieDTO){
+    public MovieDTO updateMovie(MovieDTO movieDTO) {
         MovieEntity movieEntity = toEntity(movieDTO);
         MovieEntity movie = movieRepository.save(movieEntity);
         return toDto(movie);
     }
 
-    public void deleteMovie(long id){
+    public void deleteMovie(long id) {
 
         movieRepository.deleteById(id);
     }
 
-    public List<MovieDTO> getAllMovies(int offset, int limit){
+    public List<MovieDTO> getAllMovies(int offset, int limit) {
         List<MovieDTO> list = new ArrayList<>();
-        toDtoList(movieRepository.findAll(new PageRequest(offset, limit)).getContent()).forEach(list::add);
+        List<MovieEntity> movieEntityList = movieRepository.findAll(new PageRequest(offset, limit)).getContent();
+        if (!CollectionUtils.isEmpty(movieEntityList)) {
+            toDtoList(movieEntityList).forEach(list::add);
+        }
         return list;
 
     }
 
-    public MovieDTO getMovieById(long id){
+    public MovieDTO getMovieById(long id) {
         return toDto(movieRepository.findById(id).get());
     }
 
-    public List<MovieDTO> getMovieByTitle(String title, int offset, int limit){
-        return toDtoList(movieRepository.findByTitleContaining(title, new PageRequest(offset, limit)));
+    public List<MovieDTO> getMovieByTitle(String title, int offset, int limit) {
+        List<MovieDTO> list = new ArrayList<>();
+        List<MovieEntity> movieEntityList = movieRepository.findByTitleContaining(title, new PageRequest(offset, limit));
+        if (!CollectionUtils.isEmpty(movieEntityList)) {
+            list = toDtoList(movieEntityList);
+        }
+        return list;
     }
 
-    public List<MovieDTO> getMoviesByReleaseDate(Date releaseDate, int offset, int limit){
-        return toDtoList(movieRepository.findAllByReleaseDate(releaseDate, new PageRequest(offset,limit)));
+    public List<MovieDTO> getMoviesByReleaseDate(Date releaseDate, int offset, int limit) {
+        List<MovieDTO> list = new ArrayList<>();
+        List<MovieEntity> movieEntityList = movieRepository.findAllByReleaseDate(releaseDate, new PageRequest(offset, limit));
+        if (!CollectionUtils.isEmpty(movieEntityList)) {
+            list = toDtoList(movieEntityList);
+        }
+        return list;
     }
 
 
-    public static MovieDTO toDto(MovieEntity entity){
+    public static MovieDTO toDto(MovieEntity entity) {
         MovieDTO dto = new MovieDTO();
         dto.setId(entity.getId());
         dto.setTitle(entity.getTitle());
@@ -72,7 +86,7 @@ public class MovieEntityService {
         return dto;
     }
 
-    public static MovieEntity toEntity(MovieDTO dto){
+    public static MovieEntity toEntity(MovieDTO dto) {
         MovieEntity movieEntity = new MovieEntity();
         movieEntity.setId(dto.getId());
         movieEntity.setTitle(dto.getTitle());
@@ -83,20 +97,12 @@ public class MovieEntityService {
         return movieEntity;
     }
 
-    public static List<MovieDTO> toDtoList(List<MovieEntity> list){
+    public static List<MovieDTO> toDtoList(List<MovieEntity> list) {
         List<MovieDTO> dtoList = new ArrayList<>();
-        for (MovieEntity entity : list){
+        for (MovieEntity entity : list) {
             dtoList.add(toDto(entity));
         }
         return dtoList;
-    }
-
-    public static List<MovieEntity> toEntityList(List<MovieDTO> list){
-        List<MovieEntity> entityList = new ArrayList<>();
-        for (MovieDTO dto : list){
-            entityList.add(toEntity(dto));
-        }
-        return entityList;
     }
 
 
