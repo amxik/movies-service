@@ -28,7 +28,7 @@ public class MovieDTO {
     private String genre;
 
     @JsonProperty("description")
-    @Size(min = 20, max = 255)
+    @Size(min = 10, max = 255)
     private String description;
 
     @JsonProperty("duration")
