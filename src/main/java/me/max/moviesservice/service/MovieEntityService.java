@@ -30,10 +30,59 @@ public class MovieEntityService {
         return toDto(movie);
     }
 
-    public MovieDTO updateMovie(MovieDTO movieDTO) {
-        MovieEntity movieEntity = toEntity(movieDTO);
-        MovieEntity movie = movieRepository.save(movieEntity);
-        return toDto(movie);
+
+    public MovieDTO replaceMovie(long id, MovieDTO movieDTO) {
+        MovieDTO movie = new MovieDTO();
+        movieDTO.setId(id);
+        movieDTO.setTitle(movieDTO.getTitle());
+        movieDTO.setGenre(movieDTO.getGenre());
+        movieDTO.setDescription(movieDTO.getDescription());
+        movieDTO.setDuration(movieDTO.getDuration());
+        movieDTO.setReleaseDate(movieDTO.getReleaseDate());
+
+        return movie;
+
+    }
+
+    public MovieDTO updateMovie(long id, MovieDTO movieDTO) {
+
+        MovieDTO movieFromStorage = getMovieById(id);
+
+
+        MovieDTO movie = new MovieDTO();
+
+
+        movieDTO.setId(id);
+
+        if (movieDTO.getTitle() != null) {
+            movie.setTitle(movieDTO.getTitle());
+        } else {
+            movie.setTitle(movieFromStorage.getTitle());
+        }
+        if (movieDTO.getGenre() != null) {
+            movie.setGenre(movieDTO.getGenre());
+        } else {
+            movie.setGenre(movieFromStorage.getGenre());
+        }
+        if (movieDTO.getDescription() != null) {
+            movie.setDescription(movieDTO.getDescription());
+        } else {
+            movie.setDescription(movieFromStorage.getDescription());
+        }
+        if (movieDTO.getDuration() != null) {
+            movie.setDuration(movieDTO.getDuration());
+        } else {
+            movie.setDuration(movieFromStorage.getDuration());
+        }
+        if (movieDTO.getReleaseDate() != null) {
+            movie.setReleaseDate(movieDTO.getReleaseDate());
+        } else {
+            movie.setReleaseDate(movieFromStorage.getReleaseDate());
+        }
+
+        MovieEntity movieEntity = toEntity(movie);
+        MovieEntity returnMovie = movieRepository.save(movieEntity);
+        return toDto(returnMovie);
     }
 
     public void deleteMovie(long id) {

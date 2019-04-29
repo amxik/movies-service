@@ -55,14 +55,8 @@ public class MovieEntityController {
     public @ResponseBody
     MovieDTO replaceMovie(@Valid @Min(0) @PathVariable("id") long movieId,
                           @Valid @RequestBody MovieDTO newMovie) {
-        MovieDTO movieDTO = new MovieDTO();
-        movieDTO.setId(movieId);
-        movieDTO.setTitle(newMovie.getTitle());
-        movieDTO.setGenre(newMovie.getGenre());
-        movieDTO.setDescription(newMovie.getDescription());
-        movieDTO.setDuration(newMovie.getDuration());
-        movieDTO.setReleaseDate(newMovie.getReleaseDate());
-        return movieEntityService.updateMovie(movieDTO);
+
+        return movieEntityService.updateMovie(movieId, newMovie);
     }
 
     @RequestMapping(method = RequestMethod.PATCH, value = "/{id}",
@@ -71,41 +65,8 @@ public class MovieEntityController {
     public @ResponseBody
     MovieDTO updateMovie(@Valid @Min(0) @PathVariable("id") long movieId, @Valid @RequestBody
             MovieDTO newMovie) {
-        MovieDTO movieFromStorage = movieEntityService.getMovieById(movieId);
 
-
-        MovieDTO movieDTO = new MovieDTO();
-
-
-        movieDTO.setId(movieId);
-
-        if (newMovie.getTitle() != null) {
-            movieDTO.setTitle(newMovie.getTitle());
-        } else {
-            movieDTO.setTitle(movieFromStorage.getTitle());
-        }
-        if (newMovie.getGenre() != null) {
-            movieDTO.setGenre(newMovie.getGenre());
-        } else {
-            movieDTO.setGenre(movieFromStorage.getGenre());
-        }
-        if (newMovie.getDescription() != null) {
-            movieDTO.setDescription(newMovie.getDescription());
-        } else {
-            movieDTO.setDescription(movieFromStorage.getDescription());
-        }
-        if (newMovie.getDuration() != null) {
-            movieDTO.setDuration(newMovie.getDuration());
-        } else {
-            movieDTO.setDuration(movieFromStorage.getDuration());
-        }
-        if (newMovie.getReleaseDate() != null) {
-            movieDTO.setReleaseDate(newMovie.getReleaseDate());
-        } else {
-            movieDTO.setReleaseDate(movieFromStorage.getReleaseDate());
-        }
-
-        return movieEntityService.updateMovie(movieDTO);
+        return movieEntityService.updateMovie(movieId, newMovie);
 
     }
 
