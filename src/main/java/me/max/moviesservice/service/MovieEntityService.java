@@ -103,7 +103,7 @@ public class MovieEntityService {
     }
 
     public MovieDTO getMovieById(long id) {
-        return toDto(movieRepository.findById(id).get());
+        return toDto(movieRepository.findById(id).orElseThrow(NullPointerException::new));
     }
 
     public List<MovieDTO> getMovieByTitle(String title, int offset, int limit) {

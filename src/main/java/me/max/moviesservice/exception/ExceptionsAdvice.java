@@ -23,6 +23,22 @@ public class ExceptionsAdvice {
 
         return error;
 
+    }
+
+        @ExceptionHandler(NullPointerException.class)
+        public @ResponseBody
+        ResponseEntity<MyError> handle(NullPointerException e) {
+
+        MyError myError = new MyError();
+        myError.setResponseCode(HttpStatus.BAD_REQUEST.value());
+        myError.setMessage("Movie with this id is not in the database");
+
+        ResponseEntity<MyError> error = new ResponseEntity<>(myError, HttpStatus.BAD_REQUEST);
+
+        return error;
+
+        }
+
 
     }
-}
+
