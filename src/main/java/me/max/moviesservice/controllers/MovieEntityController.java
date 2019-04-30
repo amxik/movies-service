@@ -6,6 +6,7 @@ import me.max.moviesservice.service.MovieEntityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -19,6 +20,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/movies")
+@Validated
 public class MovieEntityController {
 
     @Autowired
@@ -28,7 +30,7 @@ public class MovieEntityController {
     @RequestMapping(method = RequestMethod.GET,
             produces = {"application/json", "application/xml"})
     public @ResponseBody
-    List<me.max.moviesservice.dto.MovieDTO> getMovies(@RequestParam(value = "offset", required = false, defaultValue = "0") int offset,
+    List<MovieDTO> getMovies(@RequestParam(value = "offset", required = false, defaultValue = "0") int offset,
                                                       @RequestParam(value = "limit", required = false, defaultValue = "20") int limit) {
         return movieEntityService.getAllMovies(offset, limit);
     }
@@ -56,7 +58,7 @@ public class MovieEntityController {
     MovieDTO replaceMovie(@Valid @Min(0) @PathVariable("id") long movieId,
                           @Valid @RequestBody MovieDTO newMovie) {
 
-        return movieEntityService.updateMovie(movieId, newMovie);
+        return movieEntityService.replaceMovieById(movieId, newMovie);
     }
 
     @RequestMapping(method = RequestMethod.PATCH, value = "/{id}",

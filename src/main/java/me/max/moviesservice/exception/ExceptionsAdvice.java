@@ -2,7 +2,6 @@ package me.max.moviesservice.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -12,7 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 @ControllerAdvice
 public class ExceptionsAdvice {
-    @ExceptionHandler({UnknownException.class, MethodArgumentNotValidException.class})
+    @ExceptionHandler(Exception.class)
     public @ResponseBody
     ResponseEntity<MyError> handle(Exception e) {
 

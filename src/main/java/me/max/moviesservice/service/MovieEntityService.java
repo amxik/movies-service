@@ -31,16 +31,18 @@ public class MovieEntityService {
     }
 
 
-    public MovieDTO replaceMovie(long id, MovieDTO movieDTO) {
+    public MovieDTO replaceMovieById(long id, MovieDTO movieDTO) {
         MovieDTO movie = new MovieDTO();
-        movieDTO.setId(id);
-        movieDTO.setTitle(movieDTO.getTitle());
-        movieDTO.setGenre(movieDTO.getGenre());
-        movieDTO.setDescription(movieDTO.getDescription());
-        movieDTO.setDuration(movieDTO.getDuration());
-        movieDTO.setReleaseDate(movieDTO.getReleaseDate());
+        movie.setId(id);
+        movie.setTitle(movieDTO.getTitle());
+        movie.setGenre(movieDTO.getGenre());
+        movie.setDescription(movieDTO.getDescription());
+        movie.setDuration(movieDTO.getDuration());
+        movie.setReleaseDate(movieDTO.getReleaseDate());
 
-        return movie;
+        MovieEntity movieEntity = toEntity(movie);
+        MovieEntity returnMovie = movieRepository.save(movieEntity);
+        return toDto(returnMovie);
 
     }
 
@@ -52,7 +54,7 @@ public class MovieEntityService {
         MovieDTO movie = new MovieDTO();
 
 
-        movieDTO.setId(id);
+        movie.setId(id);
 
         if (movieDTO.getTitle() != null) {
             movie.setTitle(movieDTO.getTitle());
