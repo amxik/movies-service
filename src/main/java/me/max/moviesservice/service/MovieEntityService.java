@@ -30,10 +30,61 @@ public class MovieEntityService {
         return toDto(movie);
     }
 
-    public MovieDTO updateMovie(MovieDTO movieDTO) {
-        MovieEntity movieEntity = toEntity(movieDTO);
-        MovieEntity movie = movieRepository.save(movieEntity);
-        return toDto(movie);
+
+    public MovieDTO replaceMovieById(long id, MovieDTO movieDTO) {
+        MovieDTO movie = new MovieDTO();
+        movie.setId(id);
+        movie.setTitle(movieDTO.getTitle());
+        movie.setGenre(movieDTO.getGenre());
+        movie.setDescription(movieDTO.getDescription());
+        movie.setDuration(movieDTO.getDuration());
+        movie.setReleaseDate(movieDTO.getReleaseDate());
+
+        MovieEntity movieEntity = toEntity(movie);
+        MovieEntity returnMovie = movieRepository.save(movieEntity);
+        return toDto(returnMovie);
+
+    }
+
+    public MovieDTO updateMovie(long id, MovieDTO movieDTO) {
+
+        MovieDTO movieFromStorage = getMovieById(id);
+
+
+        MovieDTO movie = new MovieDTO();
+
+
+        movie.setId(id);
+
+        if (movieDTO.getTitle() != null) {
+            movie.setTitle(movieDTO.getTitle());
+        } else {
+            movie.setTitle(movieFromStorage.getTitle());
+        }
+        if (movieDTO.getGenre() != null) {
+            movie.setGenre(movieDTO.getGenre());
+        } else {
+            movie.setGenre(movieFromStorage.getGenre());
+        }
+        if (movieDTO.getDescription() != null) {
+            movie.setDescription(movieDTO.getDescription());
+        } else {
+            movie.setDescription(movieFromStorage.getDescription());
+        }
+        if (movieDTO.getDuration() != null) {
+            movie.setDuration(movieDTO.getDuration());
+        } else {
+            movie.setDuration(movieFromStorage.getDuration());
+        }
+        if (movieDTO.getReleaseDate() != null) {
+            movie.setReleaseDate(movieDTO.getReleaseDate());
+        } else {
+            movie.setReleaseDate(movieFromStorage.getReleaseDate());
+        }
+
+        MovieEntity movieEntity = toEntity(movie);
+        MovieEntity returnMovie = movieRepository.save(movieEntity);
+        return toDto(returnMovie);
     }
 
     public void deleteMovie(long id) {
@@ -52,7 +103,7 @@ public class MovieEntityService {
     }
 
     public MovieDTO getMovieById(long id) {
-        return toDto(movieRepository.findById(id).get());
+        return toDto(movieRepository.findById(id).orElseThrow(NullPointerException::new));
     }
 
     public List<MovieDTO> getMovieByTitle(String title, int offset, int limit) {
