@@ -25,9 +25,9 @@ public class ExceptionsAdvice {
 
     }
 
-        @ExceptionHandler(NullPointerException.class)
+        @ExceptionHandler(NotMovieIdInDatabaseException.class)
         public @ResponseBody
-        ResponseEntity<MyError> handle(NullPointerException e) {
+        ResponseEntity<MyError> handle(NotMovieIdInDatabaseException e) {
 
         MyError myError = new MyError();
         myError.setResponseCode(HttpStatus.BAD_REQUEST.value());

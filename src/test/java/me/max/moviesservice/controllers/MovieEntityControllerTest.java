@@ -1,6 +1,7 @@
 package me.max.moviesservice.controllers;
 
 import me.max.moviesservice.dto.MovieDTO;
+import me.max.moviesservice.exception.NotMovieIdInDatabaseException;
 import me.max.moviesservice.service.MovieEntityService;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,7 +22,6 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
@@ -59,7 +59,7 @@ public class MovieEntityControllerTest {
 
 
     @Test
-    public void getMovieByIdTest() {
+    public void getMovieByIdTest() throws NotMovieIdInDatabaseException {
         Mockito.when(movieEntityService.getMovieById(5)).thenReturn(testMovieDTO);
         MovieDTO movie = movieEntityController.getMovie(5);
         Assert.isTrue(movie.getId() == 5, "Id must be the same");
@@ -79,12 +79,41 @@ public class MovieEntityControllerTest {
     }
 
     @Test
-    public void testMovieGetByIdIncorrectId() throws Exception {
-
-        this.mockMvc.perform(get("/movies/-1"))
-                .andDo(print())
+    public void testMovieGetByIdStringRandom() throws Exception {
+        this.mockMvc.perform(get("/movies/string"))
                 .andExpect(status().isBadRequest());
 
+    }
+
+    @Test
+    public void ifTheMovieIdIsNotInTheDatabase() throws Exception {
+
+            this.mockMvc.perform(get("/movies/92233720368547758"))
+
+                    .andExpect(status().isBadRequest());
+
+
+    }
+
+
+    @Test
+    public void testMovieGetByDoubleId() throws Exception {
+        this.mockMvc.perform(get("/movies/5.444"))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void testMovieGetByIdMoreValueMaxLong() throws Exception {
+        this.mockMvc.perform(get("/movies/9223372036854775810"))
+                .andExpect(status().isBadRequest());
+    }
+
+
+    @Test
+    public void testMovieGetByIdLessThanZero() throws Exception {
+
+        this.mockMvc.perform(get("/movies/-1"))
+                .andExpect(status().isBadRequest());
 
     }
 

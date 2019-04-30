@@ -1,6 +1,7 @@
 package me.max.moviesservice.service;
 
 import me.max.moviesservice.dto.MovieDTO;
+import me.max.moviesservice.exception.NotMovieIdInDatabaseException;
 import me.max.moviesservice.movie.MovieEntity;
 import me.max.moviesservice.repositories.MovieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -103,7 +104,7 @@ public class MovieEntityService {
     }
 
     public MovieDTO getMovieById(long id) {
-        return toDto(movieRepository.findById(id).orElseThrow(NullPointerException::new));
+        return toDto(movieRepository.findById(id).orElseThrow(NotMovieIdInDatabaseException::new));
     }
 
     public List<MovieDTO> getMovieByTitle(String title, int offset, int limit) {
