@@ -32,7 +32,8 @@ public class MovieEntityService {
     }
 
 
-    public MovieDTO replaceMovieById(long id, MovieDTO movieDTO) {
+    public MovieDTO replaceMovieById(long id, MovieDTO movieDTO) throws MovieNotFoundException {
+        MovieDTO movieFromStorage = getMovieById(id);
         MovieDTO movie = new MovieDTO();
         movie.setId(id);
         movie.setTitle(movieDTO.getTitle());

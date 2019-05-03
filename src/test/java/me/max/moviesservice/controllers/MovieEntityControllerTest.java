@@ -29,6 +29,7 @@ import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
@@ -235,7 +236,7 @@ public class MovieEntityControllerTest {
 
         Mockito.doNothing().when(movieRepository).deleteById(5L);
 
-        mockMvc.perform(delete("/movies/5"))
+        this.mockMvc.perform(delete("/movies/5"))
                 /*.andDo(print())*/
                 .andExpect(status().isNoContent());
 
@@ -266,6 +267,40 @@ public class MovieEntityControllerTest {
                 .findAllByReleaseDate(date, pageable);
 
     }
+
+    @Test
+    public void test_PUT_NOT_FOUND() throws Exception {
+
+        Mockito.when(movieRepository.findById(10L)).thenReturn(Optional.empty());
+
+        this.mockMvc.perform(put("/movies/10")
+                .content(JSON_ENTITY)
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+
+
+    }
+
+    @Test
+    public void invalidReleaseDateTestForPATCH() throws Exception {
+
+
+        this.mockMvc.perform(patch("/movies/10")
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)
+                .content("{\"releaseDate\":\"invalidDate\"}"))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+
+    }
+
+    @Test
+    public void testSearchMoviesByInvalidReleaseDate() throws Exception{
+
+        this.mockMvc.perform(get("/movies/searchbydate/invalidDate"))
+                .andExpect(status().isBadRequest());
+
+    }
+
 
 
 }

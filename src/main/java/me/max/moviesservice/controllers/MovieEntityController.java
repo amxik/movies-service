@@ -57,7 +57,7 @@ public class MovieEntityController {
     @ResponseStatus(code = HttpStatus.CREATED)
     public @ResponseBody
     MovieDTO replaceMovie(@Valid @Min(0) @PathVariable("id") long movieId,
-                          @Valid @RequestBody MovieDTO newMovie) {
+                          @Valid @RequestBody MovieDTO newMovie) throws MovieNotFoundException {
 
         return movieEntityService.replaceMovieById(movieId, newMovie);
     }
