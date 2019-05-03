@@ -3,9 +3,10 @@ package me.max.moviesservice.movie;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDate;
 
 /**
  * Created by amxik on 22.04.2019.
@@ -33,13 +34,13 @@ public class MovieEntity {
 
     private Integer duration;
 
-    @Temporal ( TemporalType.DATE )
-    private Date releaseDate;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate releaseDate;
 
 
 
 
-    public MovieEntity(String title, String genre, String description, Integer duration, Date releaseDate) {
+    public MovieEntity(String title, String genre, String description, Integer duration, LocalDate releaseDate) {
         this.title = title;
         this.genre = genre;
         this.description = description;
@@ -106,11 +107,25 @@ public class MovieEntity {
         this.duration = duration;
     }
 
-    public Date getReleaseDate() {
+    public LocalDate getReleaseDate() {
         return releaseDate;
     }
 
-    public void setReleaseDate(Date releaseDate) {
+    public void setReleaseDate(LocalDate releaseDate) {
         this.releaseDate = releaseDate;
+    }
+
+    @Override
+    public String toString() {
+        return "MovieEntity{" +
+                "id=" + id +
+                ", createdAt=" + createdAt +
+                ", lastModified=" + lastModified +
+                ", title='" + title + '\'' +
+                ", genre='" + genre + '\'' +
+                ", description='" + description + '\'' +
+                ", duration=" + duration +
+                ", releaseDate=" + releaseDate +
+                '}';
     }
 }

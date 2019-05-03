@@ -6,7 +6,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.Objects;
 
 /**
@@ -38,7 +38,7 @@ public class MovieDTO {
 
     @JsonProperty("releaseDate")
     @NotNull
-    private Date releaseDate;
+    private LocalDate releaseDate;
 
     public long getId() {
         return id;
@@ -80,11 +80,11 @@ public class MovieDTO {
         this.duration = duration;
     }
 
-    public Date getReleaseDate() {
+    public LocalDate getReleaseDate() {
         return releaseDate;
     }
 
-    public void setReleaseDate(Date releaseDate) {
+    public void setReleaseDate(LocalDate releaseDate) {
         this.releaseDate = releaseDate;
     }
 
