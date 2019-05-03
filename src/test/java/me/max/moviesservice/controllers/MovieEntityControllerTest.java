@@ -2,6 +2,7 @@ package me.max.moviesservice.controllers;
 
 import me.max.moviesservice.movie.MovieEntity;
 import me.max.moviesservice.repositories.MovieRepository;
+import me.max.moviesservice.service.MovieEntityService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -56,6 +57,9 @@ public class MovieEntityControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @Autowired
+    private MovieEntityService movieEntityService;
 
 
     @Before
@@ -173,7 +177,7 @@ public class MovieEntityControllerTest {
 
     @Test
     public void testReplaceMovie() throws Exception {
-
+        Mockito.when(movieRepository.findById(5L)).thenReturn(Optional.of(testMovieEntity));
         Mockito.when(movieRepository.save(any(MovieEntity.class))).thenReturn(testMovieEntity);
 
         this.mockMvc.perform(put("/movies/5")
@@ -297,6 +301,7 @@ public class MovieEntityControllerTest {
     public void testSearchMoviesByInvalidReleaseDate() throws Exception{
 
         this.mockMvc.perform(get("/movies/searchbydate/invalidDate"))
+                .andDo(print())
                 .andExpect(status().isBadRequest());
 
     }
