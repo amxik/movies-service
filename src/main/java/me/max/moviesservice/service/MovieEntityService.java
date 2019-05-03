@@ -1,6 +1,7 @@
 package me.max.moviesservice.service;
 
 import me.max.moviesservice.dto.MovieDTO;
+import me.max.moviesservice.exception.MovieNotFoundException;
 import me.max.moviesservice.movie.MovieEntity;
 import me.max.moviesservice.repositories.MovieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,8 +9,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -31,7 +32,8 @@ public class MovieEntityService {
     }
 
 
-    public MovieDTO replaceMovieById(long id, MovieDTO movieDTO) {
+    public MovieDTO replaceMovieById(long id, MovieDTO movieDTO) throws MovieNotFoundException {
+        MovieDTO movieFromStorage = getMovieById(id);
         MovieDTO movie = new MovieDTO();
         movie.setId(id);
         movie.setTitle(movieDTO.getTitle());
@@ -46,7 +48,7 @@ public class MovieEntityService {
 
     }
 
-    public MovieDTO updateMovie(long id, MovieDTO movieDTO) {
+    public MovieDTO updateMovie(long id, MovieDTO movieDTO) throws MovieNotFoundException {
 
         MovieDTO movieFromStorage = getMovieById(id);
 
@@ -102,8 +104,8 @@ public class MovieEntityService {
 
     }
 
-    public MovieDTO getMovieById(long id) {
-        return toDto(movieRepository.findById(id).orElseThrow(NullPointerException::new));
+    public MovieDTO getMovieById(long id) throws MovieNotFoundException {
+        return toDto(movieRepository.findById(id).orElseThrow(()->new MovieNotFoundException(id)));
     }
 
     public List<MovieDTO> getMovieByTitle(String title, int offset, int limit) {
@@ -115,7 +117,7 @@ public class MovieEntityService {
         return list;
     }
 
-    public List<MovieDTO> getMoviesByReleaseDate(Date releaseDate, int offset, int limit) {
+    public List<MovieDTO> getMoviesByReleaseDate(LocalDate releaseDate, int offset, int limit) {
         List<MovieDTO> list = new ArrayList<>();
         List<MovieEntity> movieEntityList = movieRepository.findAllByReleaseDate(releaseDate, new PageRequest(offset, limit));
         if (!CollectionUtils.isEmpty(movieEntityList)) {

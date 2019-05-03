@@ -2,6 +2,7 @@ package me.max.moviesservice.controllers;
 
 
 import me.max.moviesservice.dto.MovieDTO;
+import me.max.moviesservice.exception.MovieNotFoundException;
 import me.max.moviesservice.service.MovieEntityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -47,7 +48,7 @@ public class MovieEntityController {
     @RequestMapping(method = RequestMethod.GET, value = "/{id}",
             produces = {"application/json", "application/xml"})
     public @ResponseBody
-    MovieDTO getMovie(@Valid @Min(0) @PathVariable("id") long movieId) {
+    MovieDTO getMovie(@Valid @Min(0) @PathVariable("id") long movieId) throws MovieNotFoundException {
         return movieEntityService.getMovieById(movieId);
     }
 
@@ -56,7 +57,7 @@ public class MovieEntityController {
     @ResponseStatus(code = HttpStatus.CREATED)
     public @ResponseBody
     MovieDTO replaceMovie(@Valid @Min(0) @PathVariable("id") long movieId,
-                          @Valid @RequestBody MovieDTO newMovie) {
+                          @Valid @RequestBody MovieDTO newMovie) throws MovieNotFoundException {
 
         return movieEntityService.replaceMovieById(movieId, newMovie);
     }
@@ -66,7 +67,7 @@ public class MovieEntityController {
     @ResponseStatus(code = HttpStatus.CREATED)
     public @ResponseBody
     MovieDTO updateMovie(@Valid @Min(0) @PathVariable("id") long movieId, @Valid @RequestBody
-            MovieDTO newMovie) {
+            MovieDTO newMovie) throws MovieNotFoundException {
 
         return movieEntityService.updateMovie(movieId, newMovie);
 
@@ -94,7 +95,7 @@ public class MovieEntityController {
     @RequestMapping(method = RequestMethod.GET, value = "/searchbydate/{releaseDate}",
             produces = {"application/json", "application/xml"})
     public @ResponseBody
-    List<MovieDTO> searchMoviesByReleaseDate(@Valid @PathVariable("releaseDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date releaseDate,
+    List<MovieDTO> searchMoviesByReleaseDate(@Valid @PathVariable("releaseDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate releaseDate,
                                              @RequestParam(value = "offset", required = false, defaultValue = "0") int offset,
                                              @RequestParam(value = "limit", required = false, defaultValue = "20") int limit) {
 

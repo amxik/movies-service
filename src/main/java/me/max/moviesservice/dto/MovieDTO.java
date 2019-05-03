@@ -1,12 +1,12 @@
 package me.max.moviesservice.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.Objects;
 
 /**
@@ -37,8 +37,8 @@ public class MovieDTO {
     private Integer duration;
 
     @JsonProperty("releaseDate")
-    @NotNull
-    private Date releaseDate;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate releaseDate;
 
     public long getId() {
         return id;
@@ -80,11 +80,11 @@ public class MovieDTO {
         this.duration = duration;
     }
 
-    public Date getReleaseDate() {
+    public LocalDate getReleaseDate() {
         return releaseDate;
     }
 
-    public void setReleaseDate(Date releaseDate) {
+    public void setReleaseDate(LocalDate releaseDate) {
         this.releaseDate = releaseDate;
     }
 
@@ -117,4 +117,6 @@ public class MovieDTO {
                 ", releaseDate=" + releaseDate +
                 '}';
     }
+
+
 }

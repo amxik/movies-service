@@ -5,7 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -16,6 +16,6 @@ public interface MovieRepository extends PagingAndSortingRepository<MovieEntity,
 
     List<MovieEntity> findByTitleContaining(String title, Pageable pageable);
 
-    List<MovieEntity> findAllByReleaseDate(Date releaseDate, Pageable pageable);
+    List<MovieEntity> findAllByReleaseDate(LocalDate releaseDate, Pageable pageable);
 
 }
