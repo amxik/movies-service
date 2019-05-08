@@ -1,9 +1,18 @@
 spring:
   profiles:
-    active: development
+    active: staging
+---
+
+
+spring:
+  profiles: production
+
+
+
+
 ---
 spring:
-  profiles: development
+  profiles: staging
   jpa:
     show-sql: false
     generate-ddl: true
