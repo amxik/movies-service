@@ -12,6 +12,7 @@ import org.springframework.util.CollectionUtils;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by amxik on 23.04.2019.
@@ -33,7 +34,7 @@ public class MovieEntityService {
 
 
     public MovieDTO replaceMovieById(long id, MovieDTO movieDTO) throws MovieNotFoundException {
-        MovieDTO movieFromStorage = getMovieById(id);
+        getMovieById(id);
         MovieDTO movie = new MovieDTO();
         movie.setId(id);
         movie.setTitle(movieDTO.getTitle());
@@ -95,22 +96,23 @@ public class MovieEntityService {
     }
 
     public List<MovieDTO> getAllMovies(int offset, int limit) {
-        List<MovieDTO> list = new ArrayList<>();
-        List<MovieEntity> movieEntityList = movieRepository.findAll(new PageRequest(offset, limit)).getContent();
-        if (!CollectionUtils.isEmpty(movieEntityList)) {
-            toDtoList(movieEntityList).forEach(list::add);
-        }
-        return list;
+
+        return movieRepository.findAll(PageRequest.of(offset, limit))
+                .get()
+                .map(MovieEntityService::toDto)
+                .collect(Collectors.toList());
 
     }
 
     public MovieDTO getMovieById(long id) throws MovieNotFoundException {
-        return toDto(movieRepository.findById(id).orElseThrow(()->new MovieNotFoundException(id)));
+        return movieRepository.findById(id)
+                .map(MovieEntityService::toDto)
+                .orElseThrow(()->new MovieNotFoundException(id));
     }
 
     public List<MovieDTO> getMovieByTitle(String title, int offset, int limit) {
         List<MovieDTO> list = new ArrayList<>();
-        List<MovieEntity> movieEntityList = movieRepository.findByTitleContaining(title, new PageRequest(offset, limit));
+        List<MovieEntity> movieEntityList = movieRepository.findByTitleContaining(title, PageRequest.of(offset, limit));
         if (!CollectionUtils.isEmpty(movieEntityList)) {
             list = toDtoList(movieEntityList);
         }
@@ -119,7 +121,7 @@ public class MovieEntityService {
 
     public List<MovieDTO> getMoviesByReleaseDate(LocalDate releaseDate, int offset, int limit) {
         List<MovieDTO> list = new ArrayList<>();
-        List<MovieEntity> movieEntityList = movieRepository.findAllByReleaseDate(releaseDate, new PageRequest(offset, limit));
+        List<MovieEntity> movieEntityList = movieRepository.findAllByReleaseDate(releaseDate,PageRequest.of(offset, limit));
         if (!CollectionUtils.isEmpty(movieEntityList)) {
             list = toDtoList(movieEntityList);
         }
