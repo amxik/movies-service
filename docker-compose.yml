@@ -18,7 +18,7 @@ services:
       MOVIES_DB_USER: movies
       MOVIES_DB_PASSWORD: movies
       MOVIES_DB: movies
-      MOVIES_DB_HOST: localhost
+      MOVIES_DB_HOST: movies-db
       MOVIES_DB_PORT: 5432
     ports:
       - 8080:8080
