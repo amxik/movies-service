@@ -7,9 +7,17 @@ services:
       POSTGRES_USER: movies
       POSTGRES_PASSWORD: movies
       POSTGRES_DB: movies
-      PGDATA: D:\pgsql\data
+    volumes:
+      - .:/var/lib/postgresql/data
     ports:
-        - 8001:5432
+        - 5432:5432
+
+
+
+
+
+
+
   movies-service:
     build: D:\Work\movies-service
     container_name: movies-service

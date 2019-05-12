@@ -53,7 +53,8 @@ public class MovieEntityController {
         return movieEntityService.createMovie(movieToCreate);
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/{id}")
+    @RequestMapping(method = RequestMethod.GET,
+            produces = {"application/json"}, value = "/{id}")
     public @ResponseBody
     MovieDTO getMovie(@Valid @Min(0) @PathVariable("id") long movieId) throws MovieNotFoundException {
         return movieEntityService.getMovieById(movieId);
