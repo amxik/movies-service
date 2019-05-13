@@ -1,0 +1,34 @@
+version: '3'
+services:
+  movies-db:
+    image: postgres:11.2-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: movies
+      POSTGRES_PASSWORD: movies
+      POSTGRES_DB: movies
+    volumes:
+      - .:/var/lib/postgresql/data
+    ports:
+        - 5432:5432
+
+
+
+
+
+
+
+  movies-service:
+    build: D:\Work\movies-service
+    container_name: movies-service
+    environment:
+      SPRING_PROFILES_ACTIVE: production
+      MOVIES_DB_USER: movies
+      MOVIES_DB_PASSWORD: movies
+      MOVIES_DB: movies
+      MOVIES_DB_HOST: movies-db
+      MOVIES_DB_PORT: 5432
+    ports:
+      - 8080:8080
+    links:
+      - movies-db

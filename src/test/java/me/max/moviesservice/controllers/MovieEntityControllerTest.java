@@ -2,7 +2,6 @@ package me.max.moviesservice.controllers;
 
 import me.max.moviesservice.movie.MovieEntity;
 import me.max.moviesservice.repositories.MovieRepository;
-import me.max.moviesservice.service.MovieEntityService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -43,7 +42,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("test")
 public class MovieEntityControllerTest {
 
-    private final Pageable pageable = new PageRequest(0, 20);
+    private final Pageable pageable = PageRequest.of(0, 20);
     private MovieEntity testMovieEntity = new MovieEntity();
 
     private final String JSON_ENTITY =
@@ -58,12 +57,8 @@ public class MovieEntityControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @Autowired
-    private MovieEntityService movieEntityService;
-
-
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
 
         testMovieEntity.setId(5L);
         testMovieEntity.setTitle("Test");
@@ -95,10 +90,10 @@ public class MovieEntityControllerTest {
 
     @Test
     public void getAllMoviesTest() throws Exception {
-        List<MovieEntity> list = new ArrayList<>();
+        List<MovieEntity> list = new ArrayList<MovieEntity>();
         list.add(testMovieEntity);
 
-        Mockito.when(page.getContent()).thenReturn(list);
+        Mockito.when(page.get()).thenReturn(list.stream());
 
         Mockito.when(movieRepository.findAll(pageable))
                 .thenReturn(page);
@@ -215,7 +210,7 @@ public class MovieEntityControllerTest {
 
     @Test
     public void testSearchMoviesByTitle() throws Exception {
-        List<MovieEntity> list = new ArrayList<>();
+        List<MovieEntity> list = new ArrayList<MovieEntity>();
         list.add(testMovieEntity);
 
         Mockito.when(movieRepository.findByTitleContaining("Test", pageable))
